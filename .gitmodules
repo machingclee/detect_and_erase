@@ -1,6 +1,6 @@
-[submodule "chi_text_eraising"]
-	path = chi_text_eraising
-	url = https://github.com/machingclee/2022-06-07-Stroke-Based-Scene-Text-Eraising.git
 [submodule "chi_text_detection"]
 	path = chi_text_detection
 	url = https://github.com/machingclee/2022-05-29-text-detection-EAST.git
+[submodule "chi_text_erasing"]
+	path = chi_text_erasing
+	url = https://github.com/machingclee/2022-06-07-Stroke-Based-Scene-Text-Erasing.git
