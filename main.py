@@ -2,7 +2,7 @@ import os
 import torch
 
 from chi_text_detection import EAST, compute_boxes
-from chi_text_erasing import InpaintGenerator, resize_and_padding, prefeed_img_transform, reverse_preprocessing
+from chi_text_erasing import InpaintGenerator, resize_and_padding, torch_img_transform, reverse_preprocessing
 from PIL import Image
 from glob import glob
 from src.utils import clean_image
@@ -18,7 +18,7 @@ def main():
 
     inpaint_gen = InpaintGenerator().to(device)
     inpaint_gen.load_state_dict(
-        torch.load("chi_text_erasing/final_pth/model_epoch_6.pth", map_location=device)
+        torch.load("chi_text_erasing/final_pth/model.pth", map_location=device)
     )
     inpaint_gen.eval()
 
