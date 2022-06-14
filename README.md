@@ -1,4 +1,4 @@
-# detect-and-eraise
+# 2022-06-10-detect-and-eraise
 Combine text detection and text erasing. 
 
 The performance still needs to be improved. We can further
