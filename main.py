@@ -17,20 +17,36 @@ def main():
     east.eval()
 
     inpaint_gen = InpaintGenerator().to(device)
+
     inpaint_gen.load_state_dict(
-        torch.load("chi_text_erasing/final_pth/model.pth", map_location=device)
+        torch.load("chi_text_erasing/final_pth/model_epoch_15.pth", map_location=device)
     )
     inpaint_gen.eval()
 
-    test_img_paths = glob("test/in/*.jpg") + glob("test_img/in/*.png")
-    out_dir = "test/out"
+    test_img_paths = glob("test/in/*.jpg") + glob("test/in/*.png")
+    detection_detail_dir = "test/out/detection_detail"
 
-    for img_path in test_img_paths:
-        basename = os.path.basename(img_path)
-        out_path = f"{out_dir}/{basename}"
-        img = clean_image(img_path, east, inpaint_gen)
-        img.save(out_path)
-        print(f"Saved result in {out_path}.")
+    if not os.path.exists(detection_detail_dir):
+        os.makedirs(detection_detail_dir)
+
+    preview_dir = "test/out"
+
+    for id, img_path in enumerate(test_img_paths):
+        img_id = str(id).zfill(4)
+        detail_dir_for_curr_img = f"{detection_detail_dir}/{img_id}".replace("jpg", "").replace("png", "")
+        img, detections, erased_detections = clean_image(img_path, east, inpaint_gen, return_detections=True)
+
+        if not os.path.exists(detail_dir_for_curr_img):
+            os.makedirs(detail_dir_for_curr_img)
+
+        for count, (detection, erased) in enumerate(zip(detections, erased_detections)):
+            detection.save(f"{detail_dir_for_curr_img}/result_{count}_detected.png")
+            erased.save(f"{detail_dir_for_curr_img}/result_{count}_erased.png")
+
+        Image.open(img_path).save(f"{preview_dir}/{img_id}_original.jpg")
+        img.save(f"{preview_dir}/{img_id}_erased.jpg")
+
+        print(f"Saved result in {detail_dir_for_curr_img}.")
 
 
 if __name__ == "__main__":
